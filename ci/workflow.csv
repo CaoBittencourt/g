@@ -1,0 +1,6 @@
+step, description          , command
+   1, pull from remote dev1, git pull
+   2, make local changes   , 
+   3, save local checkpoint, git add --all && git commit -m 'my commit message'
+   4, pull from remote dev1, git pull
+   5, push to remote dev1  , git push

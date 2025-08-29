@@ -1,0 +1,20 @@
+[ ] basic commands in dart
+  [ ] g
+  [ ] g p
+  [ ] g mm
+  [ ] g -h, g --help
+  [ ] g my commit message
+[ ] exit code checks
+  - e.g. in g mm
+[ ] copy remotes
+[ ] add commands
+
+[x] basic commands
+  [x] g
+  [x] g p
+  [x] g mm
+  [x] g -h
+  [x] g --help
+  [x] g my commit message
+[x] basic dispatch
+[x] sketch out bash commands

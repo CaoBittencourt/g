@@ -1,0 +1,2 @@
+# Assets
+Non-software assets.

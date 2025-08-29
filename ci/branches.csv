@@ -1,0 +1,6 @@
+branch, description
+stable, official release branch
+master, future release branch
+dev1  , branch for team dev 1
+...   , ...
+devn  , branch for team dev n

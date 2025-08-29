@@ -1,0 +1,7 @@
+v0: basic git wrapper in c++
+    [x] basic g cli commands
+
+v1: git wrapper cli in dart
+    [ ] all g cli commands
+    [ ] auto copy remotes
+    [ ] mode dispatch
