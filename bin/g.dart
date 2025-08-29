@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:args/args.dart' as cli;
 
 import 'package:g/data.dart' as dt;
@@ -28,30 +30,35 @@ void printUsage(cli.ArgParser argParser) {
   print(argParser.usage);
 }
 
-void main(List<String> arguments) {
+Future<void> main(List<String> arguments) async {
   final cli.ArgParser argParser = buildParser();
   try {
     final cli.ArgResults results = argParser.parse(arguments);
     bool verbose = false;
 
-    // Process the parsed arguments.
+    if (results.arguments.isEmpty) {
+      Process git = await Process.start("git", ["status"]);
+      git.stdout.pipe(stdout);
+    }
+
     if (results.flag('help')) {
       printUsage(argParser);
       return;
     }
     if (results.flag('version')) {
-      print('dsds version: $version');
+      print('g version: $version');
       return;
     }
     if (results.flag('verbose')) {
       verbose = true;
     }
+    // Process the parsed arguments.
 
-    // Act on the arguments provided.
-    print('Positional arguments: ${results.rest}');
-    if (verbose) {
-      print('[VERBOSE] All arguments: ${results.arguments}');
-    }
+    // // Act on the arguments provided.
+    // print('Positional arguments: ${results.rest}');
+    // if (verbose) {
+    //   print('[VERBOSE] All arguments: ${results.arguments}');
+    // }
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
     print(e.message);
