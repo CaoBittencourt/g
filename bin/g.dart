@@ -37,9 +37,17 @@ Future<void> main(List<String> arguments) async {
     bool verbose = false;
 
     if (results.arguments.isEmpty) {
-      Process git = await Process.start("git", ["status"]);
-      git.stdout.pipe(stdout);
+      Process git = await Process.start("git", [
+        "-c",
+        "color.ui=always",
+        "status",
+      ]);
+
+      stdout.addStream(git.stdout);
+      stderr.addStream(git.stderr);
     }
+
+    if (results.command != null) {}
 
     if (results.flag('help')) {
       printUsage(argParser);
