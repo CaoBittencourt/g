@@ -126,8 +126,6 @@ Future<void> main(List<String> args) async {
     if (results.command == null) {
       if (results.arguments.isEmpty) {
         await g.__();
-        final String currentBranch = await g.gitCurrentBranch();
-        print("currentBranch: $currentBranch");
         return;
       }
 
