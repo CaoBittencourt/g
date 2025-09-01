@@ -16,14 +16,23 @@ abstract class g {
   static const String _gitAddAll = "$_git add -A";
   static const String _gitCurrentBranch =
       "$_git rev-parse --abbrev-ref --symbolic-full-name HEAD";
+  static const String _gitCurrentHead =
+      "$_git rev-parse --abbrev-ref --symbolic-full-name @{u}";
 
   static String gitCommit(String msg) => "${g._git} commit -m '$msg'";
-  static String gitCheckout(String branch, {String? from}) => from == null
+  static String gitCheckout({required String branch, String? from}) =>
+      from == null
       ? "$_git checkout -b $branch"
       : "$_git checkout -b $branch $from";
   static String gitDeleteBranch(String branch) => "$_git branch -D $branch";
-  static String gitPush(bool friendly) =>
-      friendly ? "$_git push --force" : "$_git push";
+  static String gitPush({bool friendly = false, String? to}) =>
+      friendly ? "$_git push --force ${to ?? ""}" : "$_git push ${to ?? ""}";
+  static Future<String> gitCurrentBranch() async => (await ut.cmd([
+    g._gitCurrentBranch,
+  ])).stdout.transform(utf8.decoder).join();
+  static Future<String> gitCurrentHead() async =>
+      (await ut.cmd([g._gitCurrentHead])).stdout.transform(utf8.decoder).join();
+  static String gitMerge(String branch) => "$_git merge $branch";
 
   static Future<void> __() async {
     await ut.listen(ut.cmd([_gitStatus]));
@@ -34,13 +43,19 @@ abstract class g {
   }
 
   static Future<void> p(bool friendly) async {
-    await ut.listen(ut.cmd([g.gitPush(friendly)]));
+    await ut.listen(ut.cmd([g.gitPush()]));
   }
 
-  static Future<String> gitCurrentBranch() async {
-    return (await ut.cmd([
-      g._gitCurrentBranch,
-    ])).stdout.transform(utf8.decoder).join();
+  static Future<void> mm() async {
+    final String currentBranch = await g.gitCurrentBranch();
+    final String currentHead = await g.gitCurrentHead();
+    await ut.cmd([
+      g.gitCheckout(branch: "temp", from: "origin/HEAD"),
+      g.gitMerge(currentHead),
+      g.gitPush(to: "origin HEAD:master"),
+      g.gitCheckout(branch: currentBranch),
+      g.gitDeleteBranch("temp"),
+    ]);
   }
 
   // static Future<void> mm() async {
@@ -117,6 +132,11 @@ Future<void> main(List<String> args) async {
 
     if (results.command?.name == "p") {
       await g.p(results.command?.flag("friendly") ?? false);
+      return;
+    }
+
+    if (results.command?.name == "mm") {
+      await g.mm();
       return;
     }
 
