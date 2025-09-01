@@ -28,7 +28,8 @@ abstract class g {
       "$_git checkout${b ? ' -b ' : ' '}$branch${from == null ? '' : ' $from'}";
   static String gitDeleteBranch(String branch) => "$_git branch -D $branch";
   static String gitPush({bool friendly = false, String? to}) =>
-      friendly ? "$_git push --force ${to ?? ""}" : "$_git push ${to ?? ""}";
+      "$_git push ${friendly ? '--force ' : ''}${to ?? ''}";
+  // friendly ? "$_git push --force ${to ?? ""}" : "$_git push ${to ?? ""}";
   static Future<String> gitCurrentBranch() async => (await ut.cmd([
     g._gitCurrentBranch,
   ])).stdout.transform(utf8.decoder).join();
