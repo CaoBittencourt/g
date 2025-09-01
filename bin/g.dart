@@ -3,48 +3,9 @@ import "package:g/logic.dart" as lc;
 import "package:g/utils.dart" as ut;
 
 import "package:args/args.dart" as cli;
-import "dart:convert" show utf8;
 
 const String program = "g";
 const String version = "0.0.1";
-
-cli.ArgParser pParser() {
-  return cli.ArgParser()
-    ..addFlag(
-      "friendly",
-      abbr: "f",
-      negatable: false,
-      help: "Friendly push to remote (i.e. git push --force).",
-    )
-    ..addFlag(
-      "help",
-      abbr: "h",
-      negatable: false,
-      help: "Print this usage information.",
-    );
-}
-
-cli.ArgParser mmParser() {
-  return cli.ArgParser()..addFlag(
-    "help",
-    abbr: "h",
-    negatable: false,
-    help: "Print this usage information.",
-  );
-}
-
-cli.ArgParser buildParser() {
-  return cli.ArgParser()
-    ..addCommand("p", pParser())
-    ..addCommand("mm", mmParser())
-    ..addFlag(
-      "help",
-      abbr: "h",
-      negatable: false,
-      help: "Print this usage information.",
-    )
-    ..addFlag("version", negatable: false, help: "Print the tool version.");
-}
 
 void printUsage(cli.ArgParser argParser) {
   // print(argParser.commands.keys);
@@ -53,7 +14,8 @@ void printUsage(cli.ArgParser argParser) {
 }
 
 Future<void> main(List<String> args) async {
-  final cli.ArgParser argParser = buildParser();
+  final cli.ArgParser argParser = lc.parse.g();
+
   try {
     final cli.ArgResults results = argParser.parse(args);
 
