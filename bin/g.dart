@@ -9,40 +9,39 @@ const String program = "g";
 const String version = "0.0.1";
 
 abstract class g {
-  static const String _git = "git";
-  static const String _color = "-c color.ui=always";
-  static const String _gitStatus = "$_git $_color status";
-  static const String _gitAddAll = "$_git add -A";
-  static const String _gitCurrentBranch =
-      "$_git rev-parse --abbrev-ref --symbolic-full-name HEAD";
-  static const String _gitCurrentHead =
-      "$_git rev-parse --abbrev-ref --symbolic-full-name @{u}";
+  static const String git = "git";
+  static const String color = "-c color.ui=always";
+  static const String gitStatus = "${g.git} ${g.color} status";
+  static const String gitAddAll = "${g.git} add -A";
+  static const String gitCurrentBranch =
+      "${g.git} rev-parse --abbrev-ref --symbolic-full-name HEAD";
+  static const String gitCurrentHead =
+      "${g.git} rev-parse --abbrev-ref --symbolic-full-name @{u}";
 
-  static String gitCommit(String msg) => "${g._git} commit -m '$msg'";
+  static String gitCommit(String msg) => "${g.git} commit -m '$msg'";
   static String gitCheckout({
     required String branch,
     String? from,
     bool b = false,
   }) =>
-      "$_git checkout${b ? ' -b ' : ' '}$branch${from == null ? '' : ' $from'}";
-  static String gitDeleteBranch(String branch) => "$_git branch -D $branch";
+      "${g.git} checkout${b ? ' -b ' : ' '}$branch${from == null ? '' : ' $from'}";
+  static String gitDeleteBranch(String branch) => "${g.git} branch -D $branch";
   static String gitPush({bool friendly = false, String? to}) =>
-      "$_git push ${friendly ? '--force ' : ''}${to ?? ''}";
-  // friendly ? "$_git push --force ${to ?? ""}" : "$_git push ${to ?? ""}";
-  static Future<String> gitCurrentBranch() async => (await (await ut.cmd([
-    g._gitCurrentBranch,
+      "${g.git} push ${friendly ? '--force ' : ''}${to ?? ''}";
+  static Future<String> gitGetCurrentBranch() async => (await (await ut.cmd([
+    g.gitCurrentBranch,
   ])).stdout.transform(utf8.decoder).join()).trim();
-  static Future<String> gitCurrentHead() async => (await (await ut.cmd([
-    g._gitCurrentHead,
+  static Future<String> gitGetCurrentHead() async => (await (await ut.cmd([
+    g.gitCurrentHead,
   ])).stdout.transform(utf8.decoder).join()).trim();
-  static String gitMerge(String branch) => "$_git $_color merge $branch";
+  static String gitMerge(String branch) => "${g.git} ${g.color} merge $branch";
 
-  static Future<void> __() async {
-    await ut.listen(ut.cmd([_gitStatus]));
+  static Future<void> _() async {
+    await ut.listen(ut.cmd([g.gitStatus]));
   }
 
   static Future<void> commit(String msg) async {
-    await ut.listen(ut.cmd([g._gitAddAll, g._gitStatus, g.gitCommit(msg)]));
+    await ut.listen(ut.cmd([g.gitAddAll, g.gitStatus, g.gitCommit(msg)]));
   }
 
   static Future<void> p(bool friendly) async {
@@ -50,15 +49,12 @@ abstract class g {
   }
 
   static Future<void> mm() async {
-    final String currentBranch = await g.gitCurrentBranch();
-    final String currentHead = await g.gitCurrentHead();
-
     await ut.listen(
       ut.cmd([
         g.gitCheckout(branch: "temp", from: "origin/HEAD", b: true),
-        g.gitMerge(currentHead),
+        g.gitMerge(await g.gitGetCurrentHead()),
         g.gitPush(to: "origin HEAD:master"),
-        g.gitCheckout(branch: currentBranch),
+        g.gitCheckout(branch: await g.gitGetCurrentBranch()),
         g.gitDeleteBranch("temp"),
       ]),
     );
@@ -116,7 +112,7 @@ Future<void> main(List<String> args) async {
 
     if (results.command == null) {
       if (results.arguments.isEmpty) {
-        await g.__();
+        await g._();
         return;
       }
 
