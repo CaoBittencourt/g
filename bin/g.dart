@@ -13,14 +13,19 @@ abstract class g {
   static const String git = "git -c color.ui=always";
   static const String gitStatus = "$git status";
   static const String gitAddAll = "$git add -A";
-  static const String gitCommit = "$git commit -m ";
+
+  static String gitCommit(String msg) => "${g.git} commit -m '$msg'";
+  static String gitCheckout(String branch, {String? from}) => from == null
+      ? "$git checkout -b $branch"
+      : "$git checkout -b $branch $from";
+  static String gitDeleteBranch(String branch) => "$git branch -D $branch";
 
   static Future<void> __() async {
-    ut.cmd([g.gitStatus]);
+    await ut.cmd([gitStatus]);
   }
 
-  static commit(String msg) async {
-    ut.cmd([g.gitAddAll, g.gitStatus, (g.gitCommit + msg)]);
+  static Future<void> commit(String msg) async {
+    await ut.cmd([g.gitAddAll, g.gitStatus, g.gitCommit(msg)]);
   }
 
   // static mm() async {
