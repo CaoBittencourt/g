@@ -32,7 +32,7 @@ abstract class g {
     stdout.addStream(gitAdd.stdout);
     stderr.addStream(gitAdd.stderr);
 
-    await g.__();
+    // await g.__();
 
     Process gitCommit = await Process.start("git", [
       "-c",
