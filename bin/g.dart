@@ -1,76 +1,124 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:args/args.dart' as cli;
+import "package:args/args.dart" as cli;
 
-import 'package:g/data.dart' as dt;
-import 'package:g/logic.dart' as lc;
-import 'package:g/utils.dart' as ut;
+import "package:g/data.dart" as dt;
+import "package:g/logic.dart" as lc;
+import "package:g/utils.dart" as ut;
 
-const String version = '0.0.1';
+const String program = "g";
+const String version = "0.0.1";
+
+abstract class g {
+  static Future<void> __() async {
+    Process git = await Process.start("git", [
+      "-c",
+      "color.ui=always",
+      "status",
+    ]);
+
+    stdout.addStream(git.stdout);
+    stderr.addStream(git.stderr);
+  }
+
+  static commit(String msg) async {
+    Process gitAdd = await Process.start("git", [
+      "-c",
+      "color.ui=always",
+      "add",
+      "-A",
+    ]);
+
+    stdout.addStream(gitAdd.stdout);
+    stderr.addStream(gitAdd.stderr);
+
+    await g.__();
+
+    Process gitCommit = await Process.start("git", [
+      "-c",
+      "color.ui=always",
+      "commit",
+      "-m",
+      msg,
+    ]);
+
+    stdout.addStream(gitCommit.stdout);
+    stderr.addStream(gitCommit.stderr);
+  }
+}
+
+cli.ArgParser pParser() {
+  return cli.ArgParser()..addFlag(
+    "friendly",
+    abbr: "f",
+    negatable: false,
+    help: "Friendly push to remote (i.e. git push --force).",
+  );
+}
 
 cli.ArgParser buildParser() {
   return cli.ArgParser()
+    ..addCommand("p", pParser())
     ..addFlag(
-      'help',
-      abbr: 'h',
+      "help",
+      abbr: "h",
       negatable: false,
-      help: 'Print this usage information.',
+      help: "Print this usage information.",
     )
-    ..addFlag(
-      'verbose',
-      abbr: 'v',
-      negatable: false,
-      help: 'Show additional command output.',
-    )
-    ..addFlag('version', negatable: false, help: 'Print the tool version.');
+    ..addFlag("version", negatable: false, help: "Print the tool version.");
 }
 
 void printUsage(cli.ArgParser argParser) {
-  print('Usage: dart dsds.dart <flags> [arguments]');
+  print("Usage: $program <flags> [arguments]");
   print(argParser.usage);
 }
 
-Future<void> main(List<String> arguments) async {
+Future<void> main(List<String> args) async {
   final cli.ArgParser argParser = buildParser();
   try {
-    final cli.ArgResults results = argParser.parse(arguments);
-    bool verbose = false;
+    final cli.ArgResults results = argParser.parse(args);
 
-    if (results.arguments.isEmpty) {
-      Process git = await Process.start("git", [
-        "-c",
-        "color.ui=always",
-        "status",
-      ]);
+    if (results.command == null) {
+      if (results.arguments.isEmpty) {
+        await g.__();
+        return;
+      }
 
-      stdout.addStream(git.stdout);
-      stderr.addStream(git.stderr);
+      if (results.flag("help")) {
+        printUsage(argParser);
+        return;
+      }
+
+      if (results.flag("version")) {
+        print("$program version: $version");
+        return;
+      }
     }
 
-    if (results.command != null) {}
+    if (results.command?.name == "p") {
+      if (results.command!.flag("friendly")) {
+        print("g p friendly flag");
+      } else {
+        print("g p");
+      }
 
-    if (results.flag('help')) {
-      printUsage(argParser);
+      // Process the parsed arguments.
+
+      // // Act on the arguments provided.
+      // print("Positional arguments: ${results.rest}");
+      // if (verbose) {
+      //   print("[VERBOSE] All arguments: ${results.arguments}");
+      // }
       return;
     }
-    if (results.flag('version')) {
-      print('g version: $version');
-      return;
-    }
-    if (results.flag('verbose')) {
-      verbose = true;
-    }
-    // Process the parsed arguments.
 
-    // // Act on the arguments provided.
-    // print('Positional arguments: ${results.rest}');
-    // if (verbose) {
-    //   print('[VERBOSE] All arguments: ${results.arguments}');
-    // }
+    // otherwise, commit with message
+    await g.commit(results.arguments.join());
+    return;
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
     print(e.message);
-    print('');
+    print("");
     printUsage(argParser);
   }
 }
