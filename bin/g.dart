@@ -136,6 +136,7 @@ Future<void> main(List<String> args) async {
     }
 
     if (results.command?.name == "mm") {
+      print("g mm");
       await g.mm();
       return;
     }
