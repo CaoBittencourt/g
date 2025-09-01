@@ -11,24 +11,26 @@ const String program = "g";
 const String version = "0.0.1";
 
 abstract class g {
-  static const String git = "git -c color.ui=always";
-  static const String gitStatus = "$git status";
-  static const String gitAddAll = "$git add -A";
+  static const String _git = "git -c color.ui=always";
+  static const String _gitStatus = "$_git status";
+  static const String _gitAddAll = "$_git add -A";
+  static const String _gitCurrentBranch =
+      "$_git rev-parse --abbrev-ref --symbolic-full-name HEAD";
 
-  static String gitCommit(String msg) => "${g.git} commit -m '$msg'";
+  static String gitCommit(String msg) => "${g._git} commit -m '$msg'";
   static String gitCheckout(String branch, {String? from}) => from == null
-      ? "$git checkout -b $branch"
-      : "$git checkout -b $branch $from";
-  static String gitDeleteBranch(String branch) => "$git branch -D $branch";
+      ? "$_git checkout -b $branch"
+      : "$_git checkout -b $branch $from";
+  static String gitDeleteBranch(String branch) => "$_git branch -D $branch";
   static String gitPush(bool friendly) =>
-      friendly ? "$git push --force" : "$git push";
+      friendly ? "$_git push --force" : "$_git push";
 
   static Future<void> __() async {
-    await ut.listen(ut.cmd([gitStatus]));
+    await ut.listen(ut.cmd([_gitStatus]));
   }
 
   static Future<void> commit(String msg) async {
-    await ut.listen(ut.cmd([g.gitAddAll, g.gitStatus, g.gitCommit(msg)]));
+    await ut.listen(ut.cmd([g._gitAddAll, g._gitStatus, g.gitCommit(msg)]));
   }
 
   static Future<void> p(bool friendly) async {
@@ -36,11 +38,9 @@ abstract class g {
   }
 
   static Future<String> gitCurrentBranch() async {
-    final Process branch = await ut.cmd([
-      "(git rev-parse --abbrev-ref --symbolic-full-name HEAD)",
-    ]);
-
-    return branch.stdout.transform(utf8.decoder).join();
+    return (await ut.cmd([
+      g._gitCurrentBranch,
+    ])).stdout.transform(utf8.decoder).join();
   }
 
   // static Future<void> mm() async {
