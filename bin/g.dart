@@ -1,18 +1,17 @@
-import "dart:convert";
-import "dart:io";
-
-import "package:args/args.dart" as cli;
-
 import "package:g/data.dart" as dt;
 import "package:g/logic.dart" as lc;
 import "package:g/utils.dart" as ut;
+
+import "package:args/args.dart" as cli;
+import "dart:convert" show utf8;
 
 const String program = "g";
 const String version = "0.0.1";
 
 abstract class g {
-  static const String _git = "git -c color.ui=always";
-  static const String _gitStatus = "$_git status";
+  static const String _git = "git";
+  static const String _color = "-c color.ui=always";
+  static const String _gitStatus = "$_git $_color status";
   static const String _gitAddAll = "$_git add -A";
   static const String _gitCurrentBranch =
       "$_git rev-parse --abbrev-ref --symbolic-full-name HEAD";
@@ -36,7 +35,7 @@ abstract class g {
   static Future<String> gitCurrentHead() async => (await (await ut.cmd([
     g._gitCurrentHead,
   ])).stdout.transform(utf8.decoder).join()).trim();
-  static String gitMerge(String branch) => "$_git merge $branch";
+  static String gitMerge(String branch) => "$_git $_color merge $branch";
 
   static Future<void> __() async {
     await ut.listen(ut.cmd([_gitStatus]));
@@ -64,20 +63,6 @@ abstract class g {
       ]),
     );
   }
-
-  // static Future<void> mm() async {
-  //   "current=$(git rev-parse --abbrev-ref --symbolic-full-name HEAD) &&"
-  //   "currentHead=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}) &&"
-  //   "echo \"current: $current\" &&"
-  //   "echo \"currentHead: $currentHead\" &&"
-  //   "git checkout -b temp origin/HEAD &&"
-  //   "git merge $currentHead &&"
-  //   "git push origin HEAD:master &&"
-  //   "git checkout $current &&"
-  //   "git branch -D temp &&"
-  //   "unset current &&"
-  //   "unset currentHead",
-  // }
 }
 
 cli.ArgParser pParser() {
@@ -151,7 +136,6 @@ Future<void> main(List<String> args) async {
     }
 
     if (results.command?.name == "mm") {
-      print("g mm");
       await g.mm();
       return;
     }
