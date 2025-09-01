@@ -121,7 +121,7 @@ Future<void> main(List<String> args) async {
     }
 
     // otherwise, commit with message
-    await g.commit(results.arguments.join());
+    await g.commit(results.arguments.join(" "));
     return;
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
