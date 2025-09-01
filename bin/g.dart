@@ -75,9 +75,6 @@ Future<void> main(List<String> args) async {
 
     if (results.command == null) {
       if (results.arguments.isEmpty) {
-        print(results.arguments);
-        print(results.command);
-        print(results.name);
         await g.__();
         return;
       }
@@ -93,18 +90,12 @@ Future<void> main(List<String> args) async {
       }
     }
 
-    // if (results.command!.name == "p") {
-    //   print(results.arguments);
-    //   print(results.command);
-    //   print(results.name);
-    //   await g.p(results.command!.flag("friendly"));
-    //   return;
-    // }
+    if (results.command?.name == "p") {
+      await g.p(results.command?.flag("friendly") ?? false);
+      return;
+    }
 
     // otherwise, commit with message
-    print(results.arguments);
-    print(results.command);
-    print(results.name);
     await g.commit(results.arguments.join());
     return;
   } on FormatException catch (e) {
