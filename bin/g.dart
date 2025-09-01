@@ -30,11 +30,12 @@ abstract class g {
   static String gitPush({bool friendly = false, String? to}) =>
       "$_git push ${friendly ? '--force ' : ''}${to ?? ''}";
   // friendly ? "$_git push --force ${to ?? ""}" : "$_git push ${to ?? ""}";
-  static Future<String> gitCurrentBranch() async => (await ut.cmd([
+  static Future<String> gitCurrentBranch() async => (await (await ut.cmd([
     g._gitCurrentBranch,
-  ])).stdout.transform(utf8.decoder).join();
-  static Future<String> gitCurrentHead() async =>
-      (await ut.cmd([g._gitCurrentHead])).stdout.transform(utf8.decoder).join();
+  ])).stdout.transform(utf8.decoder).join()).trim();
+  static Future<String> gitCurrentHead() async => (await (await ut.cmd([
+    g._gitCurrentHead,
+  ])).stdout.transform(utf8.decoder).join()).trim();
   static String gitMerge(String branch) => "$_git merge $branch";
 
   static Future<void> __() async {
@@ -52,8 +53,6 @@ abstract class g {
   static Future<void> mm() async {
     final String currentBranch = await g.gitCurrentBranch();
     final String currentHead = await g.gitCurrentHead();
-
-    // git -c color.ui=always checkout -b temp origin/HEAD && git -c color.ui=always merge origin/dev && git -c color.ui=always push origin HEAD:master && git -c color.ui=always checkout  dev  && git -c color.ui=always branch -D temp
 
     await ut.listen(
       ut.cmd([
