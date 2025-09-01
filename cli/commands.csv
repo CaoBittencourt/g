@@ -9,5 +9,3 @@ g repo  [name]      , initializes a git and github/gitlab repo with very reasona
 g undo              , ctrl + z                                                                             , 
 g cl [url.git]      , git clones a repo                                                                    , git clone --depth 1 --recurse-submodules [url.git] repo && cd repo
 g sm [url.git] [dir], add a git submodule                                                                  , git submodule add --depth 1 [url.git] [path]
-g ls                , list files tracked by git                                                            , git ls-files
-g loc               , counts lines of code in all tracked files                                            , git ls-files | xargs wc -l

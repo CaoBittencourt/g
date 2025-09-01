@@ -18,42 +18,44 @@ Future<void> main(List<String> args) async {
 
   try {
     final cli.ArgResults results = argParser.parse(args);
+    print(argParser.commands.keys);
+    print(results.command?.name);
 
-    if (results.command == null) {
-      if (results.arguments.isEmpty) {
-        await lc.g.status();
-        return;
-      }
+    switch (results.command?.name) {
+      case "p":
+        {
+          if (results.command!.flag("help")) {
+            printUsage(argParser.commands["p"]!);
+            return;
+          }
 
-      if (results.flag("help")) {
-        printUsage(argParser);
-        return;
-      }
+          await lc.g.p(results.command?.flag("friendly") ?? false);
+          return;
+        }
+      case "mm":
+        {
+          await lc.g.mm();
+          return;
+        }
+      default:
+        if (results.arguments.isEmpty) {
+          await lc.g.status();
+          return;
+        } // git status
 
-      if (results.flag("version")) {
-        print("$program version: $version");
-        return;
-      }
+        if (results.flag("help")) {
+          printUsage(argParser);
+          return;
+        }
+
+        if (results.flag("version")) {
+          print("$program version: $version");
+          return;
+        }
+
+        await lc.g.commit(results.arguments.join(" "));
+        return; // otherwise, commit with message
     }
-
-    if (results.command?.name == "p") {
-      if (results.command!.flag("help")) {
-        printUsage(argParser.commands["p"]!);
-        return;
-      }
-
-      await lc.g.p(results.command?.flag("friendly") ?? false);
-      return;
-    }
-
-    if (results.command?.name == "mm") {
-      await lc.g.mm();
-      return;
-    }
-
-    // otherwise, commit with message
-    await lc.g.commit(results.arguments.join(" "));
-    return;
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
     print(e.message);
