@@ -20,10 +20,11 @@ abstract class g {
       "$_git rev-parse --abbrev-ref --symbolic-full-name @{u}";
 
   static String gitCommit(String msg) => "${g._git} commit -m '$msg'";
-  static String gitCheckout({required String branch, String? from}) =>
-      from == null
-      ? "$_git checkout -b $branch"
-      : "$_git checkout -b $branch $from";
+  static String gitCheckout({
+    required String branch,
+    String? from,
+    bool b = false,
+  }) => "$_git checkout ${b ? '-b' : ''} $branch ${from ?? ''}";
   static String gitDeleteBranch(String branch) => "$_git branch -D $branch";
   static String gitPush({bool friendly = false, String? to}) =>
       friendly ? "$_git push --force ${to ?? ""}" : "$_git push ${to ?? ""}";
@@ -51,7 +52,7 @@ abstract class g {
     final String currentHead = await g.gitCurrentHead();
     await ut.listen(
       ut.cmd([
-        g.gitCheckout(branch: "temp", from: "origin/HEAD"),
+        g.gitCheckout(branch: "temp", from: "origin/HEAD", b: true),
         g.gitMerge(currentHead),
         g.gitPush(to: "origin HEAD:master"),
         g.gitCheckout(branch: currentBranch),
