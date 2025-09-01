@@ -10,41 +10,51 @@ const String program = "g";
 const String version = "0.0.1";
 
 abstract class g {
-  static Future<void> __() async {
-    Process git = await Process.start("git", [
-      "-c",
-      "color.ui=always",
-      "status",
-    ]);
+  static const String git = "git -c color.ui=always";
+  static const String gitStatus = "$git status";
+  static const String gitAddAll = "$git add -A";
+  static const String gitCommit = "$git commit -m ";
 
-    stdout.addStream(git.stdout);
-    stderr.addStream(git.stderr);
+  static Future<void> __() async {
+    ut.cmd([g.gitStatus]);
   }
 
   static commit(String msg) async {
-    Process gitAdd = await Process.start("git", [
-      "-c",
-      "color.ui=always",
-      "add",
-      "-A",
-    ]);
-
-    stdout.addStream(gitAdd.stdout);
-    stderr.addStream(gitAdd.stderr);
-
-    // await g.__();
-
-    Process gitCommit = await Process.start("git", [
-      "-c",
-      "color.ui=always",
-      "commit",
-      "-m",
-      msg,
-    ]);
-
-    stdout.addStream(gitCommit.stdout);
-    stderr.addStream(gitCommit.stderr);
+    ut.cmd([g.gitAddAll, g.gitStatus, (g.gitCommit + msg)]);
   }
+
+  // static mm() async {
+  //   Process.start("sh", [
+  //     "-c",
+  //     "git checkout -b temp origin/HEAD",
+  //     "git merge origin/dev",
+  //     "git push origin HEAD:master",
+  //     "git checkout dev",
+  //     "git branch -D tem",
+  //   ]);
+  //   Process gitAdd = await Process.start("git", [
+  //     "-c",
+  //     "color.ui=always",
+  //     "add",
+  //     "-A",
+  //   ]);
+
+  //   stdout.addStream(gitAdd.stdout);
+  //   stderr.addStream(gitAdd.stderr);
+
+  //   // await g.__();
+
+  //   Process gitCommit = await Process.start("git", [
+  //     "-c",
+  //     "color.ui=always",
+  //     "commit",
+  //     "-m",
+  //     msg,
+  //   ]);
+
+  //   stdout.addStream(gitCommit.stdout);
+  //   stderr.addStream(gitCommit.stderr);
+  // }
 }
 
 cli.ArgParser pParser() {
