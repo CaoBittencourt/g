@@ -19,6 +19,8 @@ abstract class g {
       ? "$git checkout -b $branch"
       : "$git checkout -b $branch $from";
   static String gitDeleteBranch(String branch) => "$git branch -D $branch";
+  static String gitPush(bool friendly) =>
+      friendly ? "$git push --force" : "$git push";
 
   static Future<void> __() async {
     await ut.cmd([gitStatus]);
@@ -28,47 +30,25 @@ abstract class g {
     await ut.cmd([g.gitAddAll, g.gitStatus, g.gitCommit(msg)]);
   }
 
-  // static mm() async {
-  //   Process.start("sh", [
-  //     "-c",
-  //     "git checkout -b temp origin/HEAD",
-  //     "git merge origin/dev",
-  //     "git push origin HEAD:master",
-  //     "git checkout dev",
-  //     "git branch -D tem",
-  //   ]);
-  //   Process gitAdd = await Process.start("git", [
-  //     "-c",
-  //     "color.ui=always",
-  //     "add",
-  //     "-A",
-  //   ]);
-
-  //   stdout.addStream(gitAdd.stdout);
-  //   stderr.addStream(gitAdd.stderr);
-
-  //   // await g.__();
-
-  //   Process gitCommit = await Process.start("git", [
-  //     "-c",
-  //     "color.ui=always",
-  //     "commit",
-  //     "-m",
-  //     msg,
-  //   ]);
-
-  //   stdout.addStream(gitCommit.stdout);
-  //   stderr.addStream(gitCommit.stderr);
-  // }
+  static Future<void> p(bool friendly) async {
+    await ut.cmd([g.gitPush(friendly)]);
+  }
 }
 
 cli.ArgParser pParser() {
-  return cli.ArgParser()..addFlag(
-    "friendly",
-    abbr: "f",
-    negatable: false,
-    help: "Friendly push to remote (i.e. git push --force).",
-  );
+  return cli.ArgParser()
+    ..addFlag(
+      "friendly",
+      abbr: "f",
+      negatable: false,
+      help: "Friendly push to remote (i.e. git push --force).",
+    )
+    ..addFlag(
+      "help",
+      abbr: "h",
+      negatable: false,
+      help: "Print this usage information.",
+    );
 }
 
 cli.ArgParser buildParser() {
@@ -95,6 +75,9 @@ Future<void> main(List<String> args) async {
 
     if (results.command == null) {
       if (results.arguments.isEmpty) {
+        print(results.arguments);
+        print(results.command);
+        print(results.name);
         await g.__();
         return;
       }
@@ -110,24 +93,18 @@ Future<void> main(List<String> args) async {
       }
     }
 
-    if (results.command?.name == "p") {
-      if (results.command!.flag("friendly")) {
-        print("g p friendly flag");
-      } else {
-        print("g p");
-      }
-
-      // Process the parsed arguments.
-
-      // // Act on the arguments provided.
-      // print("Positional arguments: ${results.rest}");
-      // if (verbose) {
-      //   print("[VERBOSE] All arguments: ${results.arguments}");
-      // }
-      return;
-    }
+    // if (results.command!.name == "p") {
+    //   print(results.arguments);
+    //   print(results.command);
+    //   print(results.name);
+    //   await g.p(results.command!.flag("friendly"));
+    //   return;
+    // }
 
     // otherwise, commit with message
+    print(results.arguments);
+    print(results.command);
+    print(results.name);
     await g.commit(results.arguments.join());
     return;
   } on FormatException catch (e) {
