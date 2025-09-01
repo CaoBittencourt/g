@@ -1,8 +1,5 @@
-import 'dart:io' show Process, stderr, stdout;
+import 'dart:io' show Process;
 
 Future<Process> cmd(List<String> commands) async {
-  Process pro = await Process.start("sh", ["-c", commands.join(" && ")]);
-  stdout.addStream(pro.stdout);
-  stderr.addStream(pro.stderr);
-  return pro;
+  return await Process.start("sh", ["-c", commands.join(" && ")]);
 }

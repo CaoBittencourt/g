@@ -1,3 +1,4 @@
+import "dart:convert";
 import "dart:io";
 
 import "package:args/args.dart" as cli;
@@ -23,16 +24,38 @@ abstract class g {
       friendly ? "$git push --force" : "$git push";
 
   static Future<void> __() async {
-    await ut.cmd([gitStatus]);
+    await ut.listen(ut.cmd([gitStatus]));
   }
 
   static Future<void> commit(String msg) async {
-    await ut.cmd([g.gitAddAll, g.gitStatus, g.gitCommit(msg)]);
+    await ut.listen(ut.cmd([g.gitAddAll, g.gitStatus, g.gitCommit(msg)]));
   }
 
   static Future<void> p(bool friendly) async {
-    await ut.cmd([g.gitPush(friendly)]);
+    await ut.listen(ut.cmd([g.gitPush(friendly)]));
   }
+
+  static Future<String> gitCurrentBranch() async {
+    final Process branch = await ut.cmd([
+      "(git rev-parse --abbrev-ref --symbolic-full-name HEAD)",
+    ]);
+
+    return branch.stdout.transform(utf8.decoder).join();
+  }
+
+  // static Future<void> mm() async {
+  //   "current=$(git rev-parse --abbrev-ref --symbolic-full-name HEAD) &&"
+  //   "currentHead=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}) &&"
+  //   "echo \"current: $current\" &&"
+  //   "echo \"currentHead: $currentHead\" &&"
+  //   "git checkout -b temp origin/HEAD &&"
+  //   "git merge $currentHead &&"
+  //   "git push origin HEAD:master &&"
+  //   "git checkout $current &&"
+  //   "git branch -D temp &&"
+  //   "unset current &&"
+  //   "unset currentHead",
+  // }
 }
 
 cli.ArgParser pParser() {
@@ -76,6 +99,7 @@ Future<void> main(List<String> args) async {
     if (results.command == null) {
       if (results.arguments.isEmpty) {
         await g.__();
+        print(await g.gitCurrentBranch());
         return;
       }
 
