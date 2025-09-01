@@ -1,6 +1,8 @@
 import 'package:g/logic/commands/git.dart' as git;
 import 'package:g/utils.dart' as ut;
 
+const String _tempBranch = "temp";
+
 abstract class g {
   static Future<void> status() async {
     await ut.listen(ut.cmd([git.status]));
@@ -17,11 +19,11 @@ abstract class g {
   static Future<void> mm() async {
     await ut.listen(
       ut.cmd([
-        git.checkout(branch: "temp", from: "origin/HEAD", b: true),
+        git.checkout(branch: _tempBranch, from: "origin/HEAD", b: true),
         git.merge(await git.currentHead()),
         git.push(to: "origin HEAD:master"),
         git.checkout(branch: await git.currentBranch()),
-        git.deleteBranch("temp"),
+        git.deleteBranch(_tempBranch),
       ]),
     );
   }
