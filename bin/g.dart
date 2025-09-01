@@ -89,9 +89,19 @@ cli.ArgParser pParser() {
     );
 }
 
+cli.ArgParser mmParser() {
+  return cli.ArgParser()..addFlag(
+    "help",
+    abbr: "h",
+    negatable: false,
+    help: "Print this usage information.",
+  );
+}
+
 cli.ArgParser buildParser() {
   return cli.ArgParser()
     ..addCommand("p", pParser())
+    ..addCommand("mm", mmParser())
     ..addFlag(
       "help",
       abbr: "h",
