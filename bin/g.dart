@@ -104,6 +104,7 @@ cli.ArgParser buildParser() {
 }
 
 void printUsage(cli.ArgParser argParser) {
+  // print(argParser.commands.keys);
   print("Usage: $program <flags> [arguments]");
   print(argParser.usage);
 }
@@ -131,6 +132,11 @@ Future<void> main(List<String> args) async {
     }
 
     if (results.command?.name == "p") {
+      if (results.command!.flag("help")) {
+        printUsage(argParser.commands["p"]!);
+        return;
+      }
+
       await g.p(results.command?.flag("friendly") ?? false);
       return;
     }
