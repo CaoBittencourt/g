@@ -24,7 +24,8 @@ abstract class g {
     required String branch,
     String? from,
     bool b = false,
-  }) => "$_git checkout ${b ? '-b' : ''} $branch ${from ?? ''}";
+  }) =>
+      "$_git checkout${b ? ' -b ' : ' '}$branch${from == null ? '' : ' $from'}";
   static String gitDeleteBranch(String branch) => "$_git branch -D $branch";
   static String gitPush({bool friendly = false, String? to}) =>
       friendly ? "$_git push --force ${to ?? ""}" : "$_git push ${to ?? ""}";
@@ -50,6 +51,9 @@ abstract class g {
   static Future<void> mm() async {
     final String currentBranch = await g.gitCurrentBranch();
     final String currentHead = await g.gitCurrentHead();
+
+    // git -c color.ui=always checkout -b temp origin/HEAD && git -c color.ui=always merge origin/dev && git -c color.ui=always push origin HEAD:master && git -c color.ui=always checkout  dev  && git -c color.ui=always branch -D temp
+
     await ut.listen(
       ut.cmd([
         g.gitCheckout(branch: "temp", from: "origin/HEAD", b: true),
