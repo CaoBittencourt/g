@@ -49,13 +49,15 @@ abstract class g {
   static Future<void> mm() async {
     final String currentBranch = await g.gitCurrentBranch();
     final String currentHead = await g.gitCurrentHead();
-    await ut.cmd([
-      g.gitCheckout(branch: "temp", from: "origin/HEAD"),
-      g.gitMerge(currentHead),
-      g.gitPush(to: "origin HEAD:master"),
-      g.gitCheckout(branch: currentBranch),
-      g.gitDeleteBranch("temp"),
-    ]);
+    await ut.listen(
+      ut.cmd([
+        g.gitCheckout(branch: "temp", from: "origin/HEAD"),
+        g.gitMerge(currentHead),
+        g.gitPush(to: "origin HEAD:master"),
+        g.gitCheckout(branch: currentBranch),
+        g.gitDeleteBranch("temp"),
+      ]),
+    );
   }
 
   // static Future<void> mm() async {
