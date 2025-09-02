@@ -4,6 +4,7 @@ import 'package:g/logic.dart' as lc;
 cli.ArgParser gParser() {
   return cli.ArgParser()
     ..addCommand("p", lc.parse.p())
+    ..addCommand("d", lc.parse.d())
     ..addCommand("mm", lc.parse.mm())
     ..addFlag(
       "help",
