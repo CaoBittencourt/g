@@ -17,11 +17,17 @@ abstract class g {
   }
 
   static Future<void> mm(bool friendly) async {
+    const String to = "origin HEAD:master";
+
+    if (friendly) {
+      ut.warn.friendly(to);
+    }
+
     await ut.listen(
       ut.cmd([
         git.checkout(branch: _tempBranch, from: "origin/HEAD", b: true),
         git.merge(await git.currentHead()),
-        git.push(friendly, to: "origin HEAD:master"),
+        git.push(friendly, to: to),
         git.checkout(branch: await git.currentBranch()),
         git.deleteBranch(_tempBranch),
       ]),
