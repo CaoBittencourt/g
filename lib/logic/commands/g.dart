@@ -57,8 +57,8 @@ abstract class g {
 
   static Future<void> release(bool friendly) async {
     await _merge(
-      to: "remotes/origin/release",
-      remote: "origin HEAD:release",
+      to: "remotes/origin/stable",
+      remote: "origin HEAD:stable",
       friendly: friendly,
     );
   }
