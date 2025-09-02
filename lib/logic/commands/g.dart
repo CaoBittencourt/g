@@ -3,6 +3,7 @@ import 'package:g/utils.dart' as ut;
 
 abstract class g {
   static const String _tempBranch = "temp";
+
   static Future<void> status() async {
     await ut.listen(ut.cmd([git.status]));
   }
