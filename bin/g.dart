@@ -22,21 +22,17 @@ Future<void> main(List<String> args) async {
     print(results.command?.name);
 
     switch (results.command?.name) {
-      case "p":
-        {
-          if (results.command!.flag("help")) {
-            printUsage(argParser.commands["p"]!);
-            return;
-          }
+      case dt.commands.p:
+        if (results.command!.flag("help")) {
+          printUsage(argParser.commands[dt.commands.p]!);
+          return;
+        }
 
-          await lc.g.p(results.command?.flag("friendly") ?? false);
-          return;
-        }
-      case "mm":
-        {
-          await lc.g.mm();
-          return;
-        }
+        await lc.g.p(results.command?.flag("friendly") ?? false);
+        return;
+      case dt.commands.mm:
+        await lc.g.mm();
+        return;
       default:
         if (results.arguments.isEmpty) {
           await lc.g.status();
