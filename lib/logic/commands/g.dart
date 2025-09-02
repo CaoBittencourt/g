@@ -64,4 +64,13 @@ abstract class g {
       friendly: friendly,
     );
   }
+
+  static Future<void> repo({
+    required String name,
+    String desc = "",
+    String pat = "",
+    bool private = true,
+  }) async {
+    print(git.repo(name: name, desc: desc, private: private));
+  }
 }
