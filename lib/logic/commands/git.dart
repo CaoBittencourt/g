@@ -6,7 +6,8 @@ const String _git = "git";
 const String _color = "-c color.ui=always";
 
 const String status = "$_git $_color status";
-const String diff = "$_git $_color diff";
+const String diff = "$_git $_color diff | less"; // [task]
+const String log = "$_git $_color log | less"; // [task]
 
 const String addAll = "$_git add -A";
 

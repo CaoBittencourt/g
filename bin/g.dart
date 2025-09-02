@@ -36,6 +36,14 @@ Future<void> main(List<String> args) async {
 
         await lc.g.d();
         return;
+      case dt.commands.l:
+        if (results.command!.flag("help")) {
+          printUsage(argParser.commands[dt.commands.l]!);
+          return;
+        }
+
+        await lc.g.l();
+        return;
       case dt.commands.mm:
         if (results.command!.flag("help")) {
           printUsage(argParser.commands[dt.commands.mm]!);

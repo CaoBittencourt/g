@@ -24,6 +24,10 @@ abstract class g {
     await ut.listen(ut.cmd([git.diff]));
   }
 
+  static Future<void> l() async {
+    await ut.listen(ut.cmd([git.log]));
+  }
+
   static Future<void> mm(bool friendly) async {
     const String to = "origin HEAD:master";
 

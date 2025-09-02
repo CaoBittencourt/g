@@ -5,6 +5,7 @@ cli.ArgParser gParser() {
   return cli.ArgParser()
     ..addCommand("p", lc.parse.p())
     ..addCommand("d", lc.parse.d())
+    ..addCommand("l", lc.parse.l())
     ..addCommand("mm", lc.parse.mm())
     ..addFlag(
       "help",
