@@ -13,6 +13,10 @@ abstract class g {
   }
 
   static Future<void> p(bool friendly) async {
+    if (friendly) {
+      ut.warn.friendly(await git.currentBranch());
+    }
+
     await ut.listen(ut.cmd([git.push(friendly)]));
   }
 

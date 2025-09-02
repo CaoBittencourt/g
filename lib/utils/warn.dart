@@ -1,5 +1,5 @@
 abstract class warn {
   static void friendly(String to) {
-    print("Warning: Pushing to $to with \"friendly\" (--force) flag!");
+    print("Warning: Pushing to $to with \"friendly\" flag!\n");
   }
 }
