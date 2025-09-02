@@ -13,7 +13,7 @@ abstract class g {
   }
 
   static Future<void> p(bool friendly) async {
-    await ut.listen(ut.cmd([git.push()]));
+    await ut.listen(ut.cmd([git.push(friendly: friendly)]));
   }
 
   static Future<void> mm() async {
