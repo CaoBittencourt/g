@@ -2,7 +2,13 @@ import 'package:args/args.dart' as cli;
 
 cli.ArgParser repoParser() {
   return cli.ArgParser()
-    ..addFlag("private", help: "dsds", defaultsTo: true)
+    ..addFlag(
+      "public",
+      abbr: "p",
+      help: "Whether the created repo should be public or private (default).",
+      defaultsTo: false,
+      negatable: false,
+    )
     ..addFlag(
       "help",
       abbr: "h",
