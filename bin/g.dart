@@ -18,8 +18,6 @@ Future<void> main(List<String> args) async {
 
   try {
     final cli.ArgResults results = argParser.parse(args);
-    print(argParser.commands.keys);
-    print(results.command?.name);
 
     switch (results.command?.name) {
       case dt.commands.p:
