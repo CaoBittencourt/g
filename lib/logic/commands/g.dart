@@ -13,15 +13,15 @@ abstract class g {
   }
 
   static Future<void> p(bool friendly) async {
-    await ut.listen(ut.cmd([git.push(friendly: friendly)]));
+    await ut.listen(ut.cmd([git.push(friendly)]));
   }
 
-  static Future<void> mm() async {
+  static Future<void> mm(bool friendly) async {
     await ut.listen(
       ut.cmd([
         git.checkout(branch: _tempBranch, from: "origin/HEAD", b: true),
         git.merge(await git.currentHead()),
-        git.push(to: "origin HEAD:master"),
+        git.push(friendly, to: "origin HEAD:master"),
         git.checkout(branch: await git.currentBranch()),
         git.deleteBranch(_tempBranch),
       ]),

@@ -5,6 +5,7 @@ cli.ArgParser pParser() {
     ..addFlag(
       "friendly",
       abbr: "f",
+      defaultsTo: false,
       negatable: false,
       help: "Friendly push to remote (i.e. git push --force).",
     )

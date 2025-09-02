@@ -34,7 +34,7 @@ Future<void> main(List<String> args) async {
           return;
         }
 
-        await lc.g.mm();
+        await lc.g.mm(results.command?.flag("friendly") ?? false);
         return;
       default:
         if (results.arguments.isEmpty) {

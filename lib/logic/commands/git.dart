@@ -22,8 +22,11 @@ String checkout({required String branch, String? from, bool b = false}) =>
 
 String deleteBranch(String branch) => "$_git branch -D $branch";
 
-String push({bool friendly = false, String? to}) =>
-    "$_git push ${friendly ? '--force ' : ''}${to ?? ''}";
+String push(bool friendly, {String? to}) {
+  final String cmd = "$_git push ${friendly ? '--force ' : ''}${to ?? ''}";
+  print(cmd);
+  return cmd;
+}
 
 Future<String> currentBranch() async => (await (await ut.cmd([
   _currentBranch,
