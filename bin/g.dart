@@ -29,6 +29,11 @@ Future<void> main(List<String> args) async {
         await lc.g.p(results.command?.flag("friendly") ?? false);
         return;
       case dt.commands.mm:
+        if (results.command!.flag("help")) {
+          printUsage(argParser.commands[dt.commands.mm]!);
+          return;
+        }
+
         await lc.g.mm();
         return;
       default:
