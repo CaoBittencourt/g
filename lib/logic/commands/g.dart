@@ -18,6 +18,7 @@ abstract class g {
     }
 
     await ut.listen(ut.cmd([git.push(friendly)]));
+    // [task] verbose git push with git lfs
   }
 
   static Future<void> d() async {
