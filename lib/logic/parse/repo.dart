@@ -2,6 +2,12 @@ import 'package:args/args.dart' as cli;
 
 cli.ArgParser repoParser() {
   return cli.ArgParser()
+    ..addOption(
+      "desc",
+      abbr: "d",
+      mandatory: false,
+      help: "An (optional) repo description.",
+    )
     ..addFlag(
       "public",
       abbr: "p",

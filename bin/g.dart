@@ -59,15 +59,26 @@ Future<void> main(List<String> args) async {
           return;
         }
 
-        if (results.command!.arguments.isEmpty) {
+        if (results.command!.option("desc") != null) {
+          print("args:");
+          results.command!.arguments.forEach(print);
+          print("");
+        }
+
+        if (results.command!.rest.isEmpty) {
           print("Error: Must provide a repo name!");
           exit(1);
         }
 
-        await lc.g.repo(
-          name: results.command!.arguments[0],
-          public: results.command!.flag("public"),
-        );
+        // print("rest:");
+        // results.command!.rest.forEach(print);
+        // print("");
+
+        // await lc.g.repo(
+        //   name: results.command!.arguments[0],
+        //   desc: results.command?.option("desc") ?? "",
+        //   public: results.command!.flag("public"),
+        // );
 
         return;
       default:
@@ -87,8 +98,7 @@ Future<void> main(List<String> args) async {
         }
 
         await lc.g.commit(results.arguments.join(" "));
-        exit(0);
-      // return; // otherwise, commit with message
+        return; // otherwise, commit with message
     }
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
