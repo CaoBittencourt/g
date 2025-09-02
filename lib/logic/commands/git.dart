@@ -37,12 +37,17 @@ Future<String> currentHead() async => (await (await ut.cmd([
 
 String merge(String branch) => "$_git $_color merge $branch";
 
-String repo({required String name, String desc = "", bool public = false}) {
-  return r"""
-#!/bin/sh
+String fetch({bool all = true}) => "$_git fetch ${all ? "--all" : ""}";
 
-# create readme file
-echo "# repoName: repoDesc" > ../README.md
+List<String> repo({
+  required String name,
+  String desc = "",
+  bool public = false,
+}) {
+  return r"""
+# create readme file 
+# [task] add ":" only if repoDesc
+echo "# repoName: repoDesc" > README.md
 
 # create gitignore file
 touch .gitignore
@@ -71,5 +76,9 @@ git branch -D stable
 """
       .replaceAll("repoName", name)
       .replaceAll("repoDesc", desc)
-      .replaceAll("--visibility", public ? "--public" : "--private");
+      .replaceAll("--visibility", public ? "--public" : "--private")
+      .split('\n')
+      .where((element) => element.isNotEmpty)
+      .where((element) => !element.startsWith("#"))
+      .toList();
 }

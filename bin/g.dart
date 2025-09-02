@@ -69,7 +69,6 @@ Future<void> main(List<String> args) async {
           desc: results.command?.option("desc") ?? "",
           public: results.command!.flag("public"),
         );
-
         return;
       default:
         if (results.arguments.isEmpty) {

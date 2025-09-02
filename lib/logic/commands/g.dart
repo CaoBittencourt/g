@@ -1,5 +1,6 @@
 import 'package:g/logic/commands/git.dart' as git;
 import 'package:g/utils.dart' as ut;
+import 'package:g/utils/cmd.dart';
 
 abstract class g {
   static const String _tempBranch = "temp";
@@ -40,6 +41,7 @@ abstract class g {
 
     await ut.listen(
       ut.cmd([
+        git.fetch(all: true),
         git.checkout(branch: _tempBranch, from: to, b: true),
         git.merge(await git.currentHead()),
         git.push(friendly, to: remote),
@@ -71,6 +73,6 @@ abstract class g {
     String pat = "",
     bool public = false,
   }) async {
-    print(git.repo(name: name, desc: desc, public: public));
+    await ut.listen(ut.cmd(git.repo(name: name, desc: desc, public: public)));
   }
 }
