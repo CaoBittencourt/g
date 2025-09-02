@@ -5,6 +5,7 @@ import "package:g/logic/parse/p.dart" show pParser;
 import "package:g/logic/parse/d.dart" show dParser;
 import "package:g/logic/parse/l.dart" show lParser;
 import "package:g/logic/parse/mm.dart" show mmParser;
+import "package:g/logic/parse/release.dart" show releaseParser;
 import "package:g/logic/parse/g.dart" show gParser;
 
 abstract class parse {
@@ -13,4 +14,5 @@ abstract class parse {
   static ArgParser d() => dParser();
   static ArgParser l() => lParser();
   static ArgParser mm() => mmParser();
+  static ArgParser release() => releaseParser();
 }

@@ -7,6 +7,7 @@ cli.ArgParser gParser() {
     ..addCommand("d", lc.parse.d())
     ..addCommand("l", lc.parse.l())
     ..addCommand("mm", lc.parse.mm())
+    ..addCommand("release", lc.parse.release())
     ..addFlag(
       "help",
       abbr: "h",
