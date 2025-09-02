@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:g/data.dart" as dt;
 import "package:g/logic.dart" as lc;
 import "package:g/utils.dart" as ut;
@@ -57,7 +59,16 @@ Future<void> main(List<String> args) async {
           return;
         }
 
-        await lc.g.repo(name: "name");
+        if (results.command!.arguments.isEmpty) {
+          print("Error: Must provide a repo name!");
+          exit(1);
+        }
+
+        await lc.g.repo(
+          name: results.command!.arguments[0],
+          public: results.command!.flag("public"),
+        );
+
         return;
       default:
         if (results.arguments.isEmpty) {
@@ -76,7 +87,8 @@ Future<void> main(List<String> args) async {
         }
 
         await lc.g.commit(results.arguments.join(" "));
-        return; // otherwise, commit with message
+        exit(0);
+      // return; // otherwise, commit with message
     }
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.

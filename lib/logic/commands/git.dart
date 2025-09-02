@@ -37,7 +37,7 @@ Future<String> currentHead() async => (await (await ut.cmd([
 
 String merge(String branch) => "$_git $_color merge $branch";
 
-String repo({required String name, String desc = "", bool private = true}) {
+String repo({required String name, String desc = "", bool public = false}) {
   return r"""
 #!/bin/sh
 
@@ -71,5 +71,5 @@ git branch -D stable
 """
       .replaceAll("repoName", name)
       .replaceAll("repoDesc", desc)
-      .replaceAll("--visibility", private ? "--private" : "--public");
+      .replaceAll("--visibility", public ? "--public" : "--private");
 }

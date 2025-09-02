@@ -69,8 +69,8 @@ abstract class g {
     required String name,
     String desc = "",
     String pat = "",
-    bool private = true,
+    bool public = false,
   }) async {
-    print(git.repo(name: name, desc: desc, private: private));
+    print(git.repo(name: name, desc: desc, public: public));
   }
 }
