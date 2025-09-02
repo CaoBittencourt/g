@@ -9,18 +9,18 @@ void printUsage(cli.ArgParser argParser) {
     // print(argParser.commands.keys);
     print("Usage: $program <flags> [arguments]");
     print(argParser.usage);
-    print("\n");
+    print("");
     return;
   }
 
   print("Usage: $program <command> <flags> [arguments]");
   print("  dsds lalala");
-  print("\n");
+  print("");
   print("Subcommands:");
   for (final element in commands.entries) {
     print("  ${element.key}");
     print("    dsds lalala");
-    print("\n");
+    print("");
     // print(element.value.usage);
   }
 }

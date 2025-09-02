@@ -59,26 +59,16 @@ Future<void> main(List<String> args) async {
           return;
         }
 
-        if (results.command!.option("desc") != null) {
-          print("args:");
-          results.command!.arguments.forEach(print);
-          print("");
-        }
-
         if (results.command!.rest.isEmpty) {
           print("Error: Must provide a repo name!");
           exit(1);
         }
 
-        // print("rest:");
-        // results.command!.rest.forEach(print);
-        // print("");
-
-        // await lc.g.repo(
-        //   name: results.command!.arguments[0],
-        //   desc: results.command?.option("desc") ?? "",
-        //   public: results.command!.flag("public"),
-        // );
+        await lc.g.repo(
+          name: results.command!.rest[0],
+          desc: results.command?.option("desc") ?? "",
+          public: results.command!.flag("public"),
+        );
 
         return;
       default:
