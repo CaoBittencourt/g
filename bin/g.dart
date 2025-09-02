@@ -4,31 +4,6 @@ import "package:g/utils.dart" as ut;
 
 import "package:args/args.dart" as cli;
 
-const String program = "g";
-const String version = "0.0.1";
-
-void printUsage(cli.ArgParser argParser) {
-  final Map<String, cli.ArgParser> commands = argParser.commands;
-  if (commands.isEmpty) {
-    // print(argParser.commands.keys);
-    print("Usage: $program <flags> [arguments]");
-    print(argParser.usage);
-    print("\n");
-    return;
-  }
-
-  print("Usage: $program <command> <flags> [arguments]");
-  print("  dsds lalala");
-  print("\n");
-  print("Subcommands:");
-  for (final element in commands.entries) {
-    print("  ${element.key}");
-    print("    dsds lalala");
-    print("\n");
-    // print(element.value.usage);
-  }
-}
-
 Future<void> main(List<String> args) async {
   final cli.ArgParser argParser = lc.parse.g();
 
@@ -38,7 +13,7 @@ Future<void> main(List<String> args) async {
     switch (results.command?.name) {
       case dt.commands.p:
         if (results.command!.flag("help")) {
-          printUsage(argParser.commands[dt.commands.p]!);
+          lc.printUsage(argParser.commands[dt.commands.p]!);
           return;
         }
 
@@ -46,7 +21,7 @@ Future<void> main(List<String> args) async {
         return;
       case dt.commands.d:
         if (results.command!.flag("help")) {
-          printUsage(argParser.commands[dt.commands.d]!);
+          lc.printUsage(argParser.commands[dt.commands.d]!);
           return;
         }
 
@@ -54,7 +29,7 @@ Future<void> main(List<String> args) async {
         return;
       case dt.commands.l:
         if (results.command!.flag("help")) {
-          printUsage(argParser.commands[dt.commands.l]!);
+          lc.printUsage(argParser.commands[dt.commands.l]!);
           return;
         }
 
@@ -62,7 +37,7 @@ Future<void> main(List<String> args) async {
         return;
       case dt.commands.mm:
         if (results.command!.flag("help")) {
-          printUsage(argParser.commands[dt.commands.mm]!);
+          lc.printUsage(argParser.commands[dt.commands.mm]!);
           return;
         }
 
@@ -70,7 +45,7 @@ Future<void> main(List<String> args) async {
         return;
       case dt.commands.release:
         if (results.command!.flag("help")) {
-          printUsage(argParser.commands[dt.commands.release]!);
+          lc.printUsage(argParser.commands[dt.commands.release]!);
           return;
         }
 
@@ -83,12 +58,12 @@ Future<void> main(List<String> args) async {
         } // git status
 
         if (results.flag("help")) {
-          printUsage(argParser);
+          lc.printUsage(argParser);
           return;
         }
 
         if (results.flag("version")) {
-          print("$program version: $version");
+          print("${lc.program} version: ${lc.version}");
           return;
         }
 
@@ -99,6 +74,6 @@ Future<void> main(List<String> args) async {
     // Print usage information if an invalid argument was provided.
     print(e.message);
     print("");
-    printUsage(argParser);
+    lc.printUsage(argParser);
   }
 }
